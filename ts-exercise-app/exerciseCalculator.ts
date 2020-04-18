@@ -14,7 +14,7 @@ const calculateExercises = (
 ) => {
   let periodLength: number = actualDailyExerciseHrs.length;
   let trainingDays: number = actualDailyExerciseHrs.filter(
-    (dailyHrs) => dailyHrs == 0
+    (dailyHrs) => dailyHrs != 0
   ).length;
 
   let averageDailyExerciseHrs: number =
@@ -47,4 +47,7 @@ const calculateExercises = (
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+let targetHours: number = Number(process.argv[2]);
+let actualHours: number[] = process.argv.slice(3).map(Number);
+
+console.log(calculateExercises(actualHours, targetHours));
