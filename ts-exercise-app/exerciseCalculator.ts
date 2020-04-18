@@ -47,7 +47,34 @@ const calculateExercises = (
   };
 };
 
-let targetHours: number = Number(process.argv[2]);
-let actualHours: number[] = process.argv.slice(3).map(Number);
+interface ExerciseData {
+  targetHours: number;
+  actualHours: number[];
+}
 
-console.log(calculateExercises(actualHours, targetHours));
+const parseArguments = (args: Array<string>): ExerciseData => {
+  if (args.length < 4) throw new Error("Not enough arguments");
+  if (args.length > 20) throw new Error("Too many arguments");
+
+  let otherThanNumber = args.slice(3).find((arg) => isNaN(Number(arg)));
+
+  if (isNaN(Number(args[2])) || otherThanNumber)
+    throw new Error("The target value was not a number!");
+
+  let targetHours = Number(args[2]);
+  console.log("💩: targetHours", targetHours);
+  let actualHours = args.slice(3).map(Number);
+  console.log("💩: actualHours", actualHours);
+
+  return {
+    targetHours,
+    actualHours,
+  };
+};
+
+try {
+  const { actualHours, targetHours } = parseArguments(process.argv);
+  console.log(calculateExercises(actualHours, targetHours));
+} catch (error) {
+  console.log(error);
+}
