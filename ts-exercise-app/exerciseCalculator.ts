@@ -47,12 +47,12 @@ const calculateExercises = (
   };
 };
 
-interface ExerciseData {
+interface ArgumentValues {
   targetHours: number;
   actualHours: number[];
 }
 
-const parseArguments = (args: Array<string>): ExerciseData => {
+const parseArguments = (args: Array<string>): ArgumentValues => {
   if (args.length < 4) throw new Error("Not enough arguments");
   if (args.length > 20) throw new Error("Too many arguments");
 
@@ -78,3 +78,5 @@ try {
 } catch (error) {
   console.log(error);
 }
+
+export {};
