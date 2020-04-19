@@ -32,9 +32,9 @@ const calculateExercises = (
   if (difference > 0.5) rating = 1;
 
   let ratings = {
-    1: "smashed it",
-    2: "did aight",
-    3: "flopped",
+    1: 'smashed it',
+    2: 'did aight',
+    3: 'flopped',
   };
 
   return {
@@ -53,18 +53,18 @@ interface ArgumentValues {
 }
 
 const parseArguments = (args: Array<string>): ArgumentValues => {
-  if (args.length < 4) throw new Error("Not enough arguments");
-  if (args.length > 20) throw new Error("Too many arguments");
+  if (args.length < 4) throw new Error('Not enough arguments');
+  if (args.length > 20) throw new Error('Too many arguments');
 
   let otherThanNumber = args.slice(3).find((arg) => isNaN(Number(arg)));
 
   if (isNaN(Number(args[2])) || otherThanNumber)
-    throw new Error("The target value was not a number!");
+    throw new Error('The target value was not a number!');
 
   let targetHours = Number(args[2]);
-  console.log("💩: targetHours", targetHours);
+  console.log('💩: targetHours', targetHours);
   let actualHours = args.slice(3).map(Number);
-  console.log("💩: actualHours", actualHours);
+  console.log('💩: actualHours', actualHours);
 
   return {
     targetHours,
@@ -79,4 +79,4 @@ try {
   console.log(error);
 }
 
-export {};
+export { calculateExercises as exerciseCalculator };
