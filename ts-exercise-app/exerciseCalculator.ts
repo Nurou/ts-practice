@@ -1,49 +1,55 @@
-interface results {
-  periodLength: number;
-  trainingDays: number;
-  success: false;
+interface Results {
+  daysInPeriod: number;
+  numberOfDaysTrained: number;
+  targetDailyExerciseHrs: number;
+  wasTargetMet: boolean;
+  averageHrsTrainedDaily: number;
   rating: number;
   ratingDescription: string;
-  target: number;
-  average: number;
 }
 
 const calculateExercises = (
-  actualDailyExerciseHrs: Array<number>,
+  dailyExerciseHrs: Array<number>,
   targetDailyExerciseHrs: number
-) => {
-  let periodLength: number = actualDailyExerciseHrs.length;
-  let trainingDays: number = actualDailyExerciseHrs.filter(
+): Results => {
+  const daysInPeriod: number = dailyExerciseHrs.length;
+  const numberOfDaysTrained: number = dailyExerciseHrs.filter(
     (dailyHrs) => dailyHrs != 0
   ).length;
 
-  let averageDailyExerciseHrs: number =
-    actualDailyExerciseHrs.reduce((a, b) => a + b) / periodLength;
+  const averageDailyExerciseHrs: number =
+    dailyExerciseHrs.reduce((a, b) => a + b) / daysInPeriod;
 
-  let isTargetMet: boolean =
+  const wasTargetMet: boolean =
     averageDailyExerciseHrs >= targetDailyExerciseHrs ? true : false;
 
-  // rating
-  let difference: number = targetDailyExerciseHrs - averageDailyExerciseHrs;
-  let rating: number = 1;
+  // ratings
+  const difference: number = targetDailyExerciseHrs - averageDailyExerciseHrs;
 
-  if (difference > 1.5) rating = 3;
-  if (difference > 1) rating = 2;
-  if (difference > 0.5) rating = 1;
+  let rating = 0;
+  let ratingDescription = '';
 
-  let ratings = {
-    1: 'smashed it',
-    2: 'did aight',
-    3: 'flopped',
-  };
+  if (difference > 1.5) {
+    rating = 3;
+    ratingDescription = 'flopped';
+  }
+  if (difference > 1) {
+    rating = 2;
+    ratingDescription = 'did aight';
+  }
+  if (difference > 0.5) {
+    rating = 1;
+    ratingDescription = 'smashed it';
+  }
 
   return {
-    periodLength,
-    trainingDays,
-    success: isTargetMet,
-    ratingDescription: ratings[rating],
-    target: targetDailyExerciseHrs,
-    average: averageDailyExerciseHrs,
+    daysInPeriod,
+    numberOfDaysTrained,
+    targetDailyExerciseHrs,
+    wasTargetMet,
+    averageHrsTrainedDaily: averageDailyExerciseHrs,
+    rating,
+    ratingDescription,
   };
 };
 
@@ -56,15 +62,13 @@ const parseArguments = (args: Array<string>): ArgumentValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 20) throw new Error('Too many arguments');
 
-  let otherThanNumber = args.slice(3).find((arg) => isNaN(Number(arg)));
+  const otherThanNumber = args.slice(3).find((arg) => isNaN(Number(arg)));
 
   if (isNaN(Number(args[2])) || otherThanNumber)
     throw new Error('The target value was not a number!');
 
-  let targetHours = Number(args[2]);
-  console.log('💩: targetHours', targetHours);
-  let actualHours = args.slice(3).map(Number);
-  console.log('💩: actualHours', actualHours);
+  const targetHours = Number(args[2]);
+  const actualHours = args.slice(3).map(Number);
 
   return {
     targetHours,
