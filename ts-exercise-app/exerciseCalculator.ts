@@ -21,25 +21,25 @@ const calculateExercises = (
     dailyExerciseHrs.reduce((a, b) => a + b) / daysInPeriod;
 
   const wasTargetMet: boolean =
-    averageDailyExerciseHrs >= targetDailyExerciseHrs ? true : false;
+    averageDailyExerciseHrs >= targetDailyExerciseHrs;
 
   // ratings
-  const difference: number = targetDailyExerciseHrs - averageDailyExerciseHrs;
+  const difference: number = averageDailyExerciseHrs - targetDailyExerciseHrs;
 
   let rating = 0;
   let ratingDescription = '';
 
   if (difference > 1.5) {
     rating = 3;
-    ratingDescription = 'flopped';
+    ratingDescription = 'smashed it';
   }
   if (difference > 1) {
     rating = 2;
     ratingDescription = 'did aight';
   }
-  if (difference > 0.5) {
+  if (difference < 1) {
     rating = 1;
-    ratingDescription = 'smashed it';
+    ratingDescription = 'flopped';
   }
 
   return {
@@ -53,34 +53,34 @@ const calculateExercises = (
   };
 };
 
-interface ArgumentValues {
-  targetHours: number;
-  actualHours: number[];
-}
+// interface ArgumentValues {
+//   targetHours: number;
+//   actualHours: number[];
+// }
 
-const parseArguments = (args: Array<string>): ArgumentValues => {
-  if (args.length < 4) throw new Error('Not enough arguments');
-  if (args.length > 20) throw new Error('Too many arguments');
+// const parseArguments = (args: Array<string>): ArgumentValues => {
+//   if (args.length < 4) throw new Error('Not enough arguments');
+//   if (args.length > 20) throw new Error('Too many arguments');
 
-  const otherThanNumber = args.slice(3).find((arg) => isNaN(Number(arg)));
+//   const otherThanNumber = args.slice(3).find((arg) => isNaN(Number(arg)));
 
-  if (isNaN(Number(args[2])) || otherThanNumber)
-    throw new Error('The target value was not a number!');
+//   if (isNaN(Number(args[2])) || otherThanNumber)
+//     throw new Error('The target value was not a number!');
 
-  const targetHours = Number(args[2]);
-  const actualHours = args.slice(3).map(Number);
+//   const targetHours = Number(args[2]);
+//   const actualHours = args.slice(3).map(Number);
 
-  return {
-    targetHours,
-    actualHours,
-  };
-};
+//   return {
+//     targetHours,
+//     actualHours,
+//   };
+// };
 
-try {
-  const { actualHours, targetHours } = parseArguments(process.argv);
-  console.log(calculateExercises(actualHours, targetHours));
-} catch (error) {
-  console.log(error);
-}
+// try {
+//   const { actualHours, targetHours } = parseArguments(process.argv);
+//   console.log(calculateExercises(actualHours, targetHours));
+// } catch (error) {
+//   console.log(error);
+// }
 
 export { calculateExercises as exerciseCalculator };
