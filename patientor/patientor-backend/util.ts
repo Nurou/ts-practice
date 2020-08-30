@@ -3,13 +3,13 @@ import { NewPatientEntry } from './types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const toNewPatientEntry = (object: any): NewPatientEntry => {
-  console.log(object);
   const newEntry: NewPatientEntry = {
     name: parseName(object.name),
     dateOfBirth: parseDob(object.dateOfBirth),
     ssn: parseSsn(object.ssn),
     gender: parseGender(object.gender),
     occupation: parseOccupation(object.occupation),
+    entries: object.entries,
   };
   return newEntry;
 };
@@ -53,7 +53,7 @@ const parseDob = (date: any): string => {
   return date;
 };
 
-const parseGender = (gender: any): Gender => {
+export const parseGender = (gender: any): Gender => {
   if (!gender || !isString(gender) || !isGender(gender)) {
     throw new Error('Incorrect or missing gender: ' + gender);
   }
