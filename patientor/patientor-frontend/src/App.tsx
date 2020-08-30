@@ -9,7 +9,7 @@ import { Patient } from './types';
 
 import PatientListPage from './PatientListPage';
 import PatientInfo from './PatientListPage/PatientInfo';
-
+//
 const App: React.FC = () => {
   const [, dispatch] = useStateValue();
   React.useEffect(() => {
