@@ -4,8 +4,6 @@ export interface Diagnosis {
   latin?: string;
 }
 
-// represents a light weight patient journal entry.
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BaseEntry {
   id: string;
   description: string;

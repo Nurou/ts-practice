@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router';
 import { useStateValue, addPatient } from '../state';
 import { apiBaseUrl } from '../constants';
@@ -35,6 +35,25 @@ export const PatientInfo = () => {
           <span>ssn: {patients[patientId].ssn}</span>
           <br />
           <span>occupation: {patients[patientId].occupation}</span>
+          {patients[patientId].entries && (
+            <>
+              <h2>entries</h2>
+              {patients[patientId].entries!.map((entry) => (
+                <React.Fragment key={entry.description}>
+                  <span>{entry.date}</span>
+                  <br />
+                  <p>{entry.description}</p>
+                  {entry.diagnosisCodes && (
+                    <ul>
+                      {entry.diagnosisCodes.map((code) => (
+                        <li key={code}>{code}</li>
+                      ))}
+                    </ul>
+                  )}
+                </React.Fragment>
+              ))}
+            </>
+          )}
         </>
       )}
     </>
