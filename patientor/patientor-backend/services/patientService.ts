@@ -1,12 +1,11 @@
 import { parseGender } from './../util';
-import { Patient, NewPatientEntry, Entry } from './../types';
-import { patientEntries } from '../data/patients';
+import { Patient, NewPatientEntry } from './../types';
+import patientEntries from '../data/patients';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getPatientEntries = (): Patient[] => {
-  const entries: Entry[] = [];
   return patientEntries.map(
-    ({ id, name, dateOfBirth, gender, occupation, ssn }) => ({
+    ({ id, name, dateOfBirth, gender, occupation, ssn, entries }) => ({
       id,
       name,
       dateOfBirth,

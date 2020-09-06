@@ -15,6 +15,8 @@ const PatientListPage: React.FC = () => {
   // get state and dispatch
   const [{ patients }, dispatch] = useStateValue();
 
+  console.log({ patients });
+
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
 
