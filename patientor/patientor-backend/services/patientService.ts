@@ -1,6 +1,6 @@
-import { Entry } from './../../patientor-frontend/src/types';
+import { HealthCheckEntry } from './../../patientor-frontend/src/types';
 import { parseGender } from './../util';
-import { Patient, NewPatientEntry } from './../types';
+import { Patient, NewPatientEntry, NewEntry } from './../types';
 import patientEntries from '../data/patients';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -29,17 +29,20 @@ export const addPatient = (entry: NewPatientEntry): Patient => {
 };
 
 export const addEntry = (
-  patientId: string,
-  entry: Entry
+  entry: NewEntry,
+  patientId: string
 ): Patient | undefined => {
   // get patient
   const patient = patientEntries.find((patient) => patient.id === patientId);
 
   // add entry
   if (patient) {
-    console.log('💩: patient', patient);
-    console.log('💩: patient.entries', patient.entries);
-    patient.entries = { ...patient.entries };
+    const newEntry = {
+      id: uuidv4(),
+      type: 'HealthCheck' as HealthCheckEntry['type'],
+      ...entry,
+    };
+    patient.entries.push(newEntry);
     return patient;
   }
 

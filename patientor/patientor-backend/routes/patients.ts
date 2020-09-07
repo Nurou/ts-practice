@@ -1,4 +1,4 @@
-import { toNewPatientEntry } from './../util';
+import { toNewPatientEntry, toNewEntry } from './../util';
 import {
   getPatientEntries,
   addPatient,
@@ -35,8 +35,9 @@ router.post('/', (req, res) => {
 // and entry data
 // return updated patient
 router.post('/:id/entries', (req, res) => {
+  console.log('adding a new entry on the server');
   try {
-    const patientWithNewEntry = addEntry(req.params.id, req.body);
+    const patientWithNewEntry = addEntry(toNewEntry(req.body), req.params.id);
     res.json(patientWithNewEntry);
   } catch (e) {
     res.status(400).send(e.message);
