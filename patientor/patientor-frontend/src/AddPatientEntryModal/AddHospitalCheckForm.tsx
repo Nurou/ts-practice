@@ -2,32 +2,33 @@ import React from 'react';
 import { Grid, Button } from 'semantic-ui-react';
 import { Field, Formik, Form } from 'formik';
 
-import { TextField, SelectField } from './FormField';
-import { Entry, HealthCheckEntry } from '../types';
-import { NumberField } from '../AddPatientModal/FormField';
-
-export type EntryFormValues = Omit<HealthCheckEntry, 'id' | 'type'>;
+import { TextField } from './FormField';
+import { HospitalEntry } from '../types';
 
 interface Props {
-  onSubmit: (values: EntryFormValues) => void;
+  onSubmit: (values: Omit<HospitalEntry, 'id'>) => void;
   onCancel: () => void;
 }
 
 /**
  * Supports adding entries of type 'HealthCheck'
- * @param param0
+ * @param param
  */
-export const AddPatientEntryForm: React.FC<Props> = ({
+export const AddHospitalCheckForm: React.FC<Props> = ({
   onSubmit,
   onCancel,
 }) => {
   return (
     <Formik
       initialValues={{
+        type: 'Hospital',
         date: '',
         specialist: '',
         description: '',
-        healthCheckRating: 1,
+        discharge: {
+          date: '',
+          criteria: '',
+        },
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -42,8 +43,8 @@ export const AddPatientEntryForm: React.FC<Props> = ({
         if (!values.description) {
           errors.description = requiredError;
         }
-        if (!values.healthCheckRating) {
-          errors.healthCheckRating = requiredError;
+        if (!values.discharge) {
+          errors.discharge = requiredError;
         }
         return errors;
       }}
@@ -70,12 +71,16 @@ export const AddPatientEntryForm: React.FC<Props> = ({
               component={TextField}
             />
             <Field
-              label='Health Check Rating'
-              placeholder={0}
-              name='healthCheckRating'
-              min={1}
-              max={3}
-              component={NumberField}
+              label='Discharge Date'
+              placeholder='YYYY-MM-DD'
+              name='discharge.date'
+              component={TextField}
+            />
+            <Field
+              label='Discharge Criteria'
+              placeholder=''
+              name='discharge.criteria'
+              component={TextField}
             />
 
             <Grid>
@@ -102,4 +107,4 @@ export const AddPatientEntryForm: React.FC<Props> = ({
   );
 };
 
-export default AddPatientEntryForm;
+export default AddHospitalCheckForm;

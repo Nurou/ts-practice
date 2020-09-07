@@ -67,10 +67,23 @@ const isGender = (param: any): param is Gender => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const toNewEntry = (object: any): NewEntry => {
   const newEntry: NewEntry = {
+    type: object.type,
     date: parseDate(object.date),
     specialist: parseSpecialist(object.specialist),
     description: parseDescription(object.description),
-    healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
+    diagnosisCodes: object.diagnosisCodes,
+    ...(object.healthCheckRating && {
+      healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
+    }),
+    ...(object.employerName && {
+      employerName: parseEmployerName(object.employerName),
+    }),
+    ...(object.sickLeave && {
+      sickLeave: parseSickLeave(object.sickLeave),
+    }),
+    ...(object.discharge && {
+      discharge: parseDischarge(object.discharge),
+    }),
   };
   return newEntry;
 };
@@ -104,6 +117,14 @@ const parseSpecialist = (specialist: any): string => {
   return specialist;
 };
 
+const parseEmployerName = (employerName: any): string => {
+  if (!employerName || !isString(employerName)) {
+    throw new Error('Incorrect or missing employer name: ' + employerName);
+  }
+
+  return employerName;
+};
+
 const parseDate = (date: any): string => {
   if (!date || !isString(date) || !isDate(date)) {
     throw new Error('Incorrect or missing date of birth: ' + date);
@@ -113,4 +134,25 @@ const parseDate = (date: any): string => {
 
 const isHealthCheckRating = (param: any): param is HealthCheckRating => {
   return Object.values(HealthCheckRating).includes(param);
+};
+
+const parseSickLeave = (sickLeave: any): string => {
+  if (
+    !sickLeave ||
+    !isString(sickLeave.startDate) ||
+    !isString(sickLeave.endDate)
+  ) {
+    throw new Error('Incorrect or missing sick leave: ' + sickLeave);
+  }
+  return sickLeave;
+};
+const parseDischarge = (discharge: any): string => {
+  if (
+    !discharge ||
+    !isString(discharge.date) ||
+    !isString(discharge.criteria)
+  ) {
+    throw new Error('Incorrect or missing discharge: ' + discharge);
+  }
+  return discharge;
 };

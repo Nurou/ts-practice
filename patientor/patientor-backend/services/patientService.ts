@@ -1,4 +1,3 @@
-import { HealthCheckEntry } from './../../patientor-frontend/src/types';
 import { parseGender } from './../util';
 import { Patient, NewPatientEntry, NewEntry } from './../types';
 import patientEntries from '../data/patients';
@@ -39,7 +38,6 @@ export const addEntry = (
   if (patient) {
     const newEntry = {
       id: uuidv4(),
-      type: 'HealthCheck' as HealthCheckEntry['type'],
       ...entry,
     };
     patient.entries.push(newEntry);

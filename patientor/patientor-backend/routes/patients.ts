@@ -30,12 +30,8 @@ router.post('/', (req, res) => {
   }
 });
 
-// addEntry to corresponding patient:
-// call method for adding entry with patient id
-// and entry data
-// return updated patient
 router.post('/:id/entries', (req, res) => {
-  console.log('adding a new entry on the server');
+  console.log(req.body);
   try {
     const patientWithNewEntry = addEntry(toNewEntry(req.body), req.params.id);
     res.json(patientWithNewEntry);

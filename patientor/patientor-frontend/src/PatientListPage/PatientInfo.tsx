@@ -3,35 +3,41 @@ import { useParams } from 'react-router';
 import { useStateValue, addPatient } from '../state';
 import { apiBaseUrl } from '../constants';
 import axios from 'axios';
-import { Patient, Entry } from '../types';
+import { Patient } from '../types';
 import EntryDetails from './Entry';
-import AddPatientEntryModal from '../AddPatientEntryModal';
-import { EntryFormValues } from '../AddPatientEntryModal/AddPatientEntryForm';
 import { Button } from 'semantic-ui-react';
+import AddPatientEntryModal, { EntryFormValues } from '../AddPatientEntryModal';
 
 export const PatientInfo = () => {
   const { id: patientId } = useParams<{ id: string }>();
-  const [{ patients, diagnoses }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue();
 
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  // const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [healthCheckModal, setHealthCheckModal] = React.useState<boolean>(
+    false
+  );
+  const [
+    occupationalHealthCareModal,
+    setOccupationalHealthCareModal,
+  ] = React.useState<boolean>(false);
+  const [hospitalModal, setHospitalModal] = React.useState<boolean>(false);
+
   const [error, setError] = React.useState<string | undefined>();
 
-  const openModal = (): void => setModalOpen(true);
-
   const closeModal = (): void => {
-    setModalOpen(false);
+    setHealthCheckModal(false);
+    setOccupationalHealthCareModal(false);
+    setHospitalModal(false);
     setError(undefined);
   };
 
   const submitNewPatientEntry = async (values: EntryFormValues) => {
+    console.log(values);
     try {
-      console.log(values);
-      console.log(`${apiBaseUrl}/patients/${patientId}/entries`);
       const { data: updatedPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${patientId}/entries`,
         values
       );
-      console.log(updatedPatient);
       dispatch({ type: 'ADD_PATIENT', payload: updatedPatient });
       closeModal();
     } catch (e) {
@@ -70,13 +76,37 @@ export const PatientInfo = () => {
           {patients[patientId].entries?.map((entry, index) => (
             <EntryDetails key={index} entry={entry} />
           ))}
+          {/* modals for all of the entry types */}
           <AddPatientEntryModal
-            modalOpen={modalOpen}
+            modalOpen={healthCheckModal}
             onSubmit={submitNewPatientEntry}
             error={error}
             onClose={closeModal}
+            type='healthCheck'
           />
-          <Button onClick={() => openModal()}>Add New Entry</Button>
+          <AddPatientEntryModal
+            modalOpen={occupationalHealthCareModal}
+            onSubmit={submitNewPatientEntry}
+            error={error}
+            onClose={closeModal}
+            type='occupational'
+          />
+          <AddPatientEntryModal
+            modalOpen={hospitalModal}
+            onSubmit={submitNewPatientEntry}
+            error={error}
+            onClose={closeModal}
+            type='hospital'
+          />
+          <Button onClick={() => setHealthCheckModal(true)}>
+            Add Health Check Entry
+          </Button>
+          <Button onClick={() => setOccupationalHealthCareModal(true)}>
+            Add Occupational Health Care Entry
+          </Button>
+          <Button onClick={() => setHospitalModal(true)}>
+            Add Hospital Entry
+          </Button>
         </>
       )}
     </>
