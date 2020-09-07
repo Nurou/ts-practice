@@ -7,7 +7,7 @@ import { Patient } from '../types';
 
 export const PatientInfo = () => {
   const { id: patientId } = useParams<{ id: string }>();
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
 
   React.useEffect(() => {
     const fetchPatient = async (patientId: string): Promise<void> => {
@@ -46,7 +46,9 @@ export const PatientInfo = () => {
                   {entry.diagnosisCodes && (
                     <ul>
                       {entry.diagnosisCodes.map((code) => (
-                        <li key={code}>{code}</li>
+                        <li key={code}>
+                          {code}: {diagnoses[code]?.name}
+                        </li>
                       ))}
                     </ul>
                   )}
