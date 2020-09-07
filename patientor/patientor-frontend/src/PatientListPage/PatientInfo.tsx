@@ -3,7 +3,8 @@ import { useParams } from 'react-router';
 import { useStateValue, addPatient } from '../state';
 import { apiBaseUrl } from '../constants';
 import axios from 'axios';
-import { Patient } from '../types';
+import { Patient, Entry } from '../types';
+import EntryDetails from './Entry';
 
 export const PatientInfo = () => {
   const { id: patientId } = useParams<{ id: string }>();
@@ -35,31 +36,13 @@ export const PatientInfo = () => {
           <span>ssn: {patients[patientId].ssn}</span>
           <br />
           <span>occupation: {patients[patientId].occupation}</span>
-          {patients[patientId].entries && (
-            <>
-              <h2>entries</h2>
-              {patients[patientId].entries!.map((entry) => (
-                <React.Fragment key={entry.description}>
-                  <span>{entry.date}</span>
-                  <br />
-                  <p>{entry.description}</p>
-                  {entry.diagnosisCodes && (
-                    <ul>
-                      {entry.diagnosisCodes.map((code) => (
-                        <li key={code}>
-                          {code}: {diagnoses[code]?.name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </React.Fragment>
-              ))}
-            </>
-          )}
+          {patients[patientId].entries && <h2>Entries</h2>}
+          {patients[patientId].entries?.map((entry, index) => (
+            <EntryDetails key={index} entry={entry} />
+          ))}
         </>
       )}
     </>
   );
 };
-
 export default PatientInfo;
