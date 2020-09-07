@@ -1,3 +1,4 @@
+import { Entry } from './../../patientor-frontend/src/types';
 import { parseGender } from './../util';
 import { Patient, NewPatientEntry } from './../types';
 import patientEntries from '../data/patients';
@@ -25,4 +26,22 @@ export const addPatient = (entry: NewPatientEntry): Patient => {
 
   patientEntries.push(newPatientEntry);
   return newPatientEntry;
+};
+
+export const addEntry = (
+  patientId: string,
+  entry: Entry
+): Patient | undefined => {
+  // get patient
+  const patient = patientEntries.find((patient) => patient.id === patientId);
+
+  // add entry
+  if (patient) {
+    console.log('💩: patient', patient);
+    console.log('💩: patient.entries', patient.entries);
+    patient.entries = { ...patient.entries };
+    return patient;
+  }
+
+  return;
 };
